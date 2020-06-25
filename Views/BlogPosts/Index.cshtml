@@ -1,0 +1,105 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<Katie_Rosario_Blog.Models.BlogPost>
+
+
+<div class="container-fluid">
+
+    @{
+    ViewBag.Title = "Index";
+    }
+
+
+    <h1>Index</h1>
+
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayName("Created")
+                </th>
+                <th>
+                    @Html.DisplayName("Updated")
+                </th>
+                <th>
+                    @Html.DisplayName("Title")
+                </th>
+                <th>
+                    @Html.DisplayName("Slug")
+                </th>
+                <th>
+                    @Html.DisplayName("Abstract")
+                </th>
+                <th>
+                    @Html.DisplayName("Body")
+                </th>
+                <th>
+                    @Html.DisplayName("Image")
+                </th>
+                <th>
+                    @Html.DisplayName("Published")
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Created)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Updated)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Slug)
+                    </td>
+                    <td>
+                        @Html.ActionLink(item.Abstract, "Details", "BlogPosts", new { Slug = item.Slug }, null)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Body)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MediaUrl)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Published)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    </td>
+                </tr>
+            }
+
+        </table>
+
+        <div class="row">
+            <div class="col-4">
+                <h4>
+                    @Html.ActionLink("Create New", "Create")
+                </h4>
+            </div>
+        </div>
+
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+
+</div>
+
+    @section Scripts {
+        <script src="~/Scripts/tinymce/tinymce.js"></script>
+        <script src="~/Scripts/tinymce/tinymce.min.js"></script>
+        <script>
+            $(function () {
+                tinymce.init({
+                    selector: '#Body'
+                });
+            });
+        </script>
+
+    }
+

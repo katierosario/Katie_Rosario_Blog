@@ -1,0 +1,131 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@using Katie_Rosario_Blog.Models
+@model IPagedList<BlogPost>
+
+<!-- Page Header-->
+<section class="module-header parallax bg-dark bg-dark-30" data-background="Images/module-3-green.jpg">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="h1 m-b-10">BLOG</h1>
+                <h1 class="h6">Katie Rosario</h1>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Page Header end-->
+<!-- Blog-->
+<section class="module">
+    <div class="container">
+        <div class="row">
+            <!-- Content-->
+            <div class="col-lg-8">
+
+                @foreach (var post in Model)
+                {
+                    <article class="post">
+                        <div class="post-preview">
+                            <a href="@Url.Action("Details", "BlogPosts", new { slug = post.Slug })"><img src="@post.MediaUrl" alt=""></a>
+                        </div>
+                        <div class="post-wrapper">
+                            <div class="post-header">
+                                <h2 class="post-title">
+                                    @Html.ActionLink(post.Title, "Details", "BlogPosts", new { slug = post.Slug }, null)
+                                </h2>
+                                <ul class="post-meta h6">
+                                    <div class="post-meta">
+                                        <a href="#">Katie Rosario</a>
+                                        on @post.Created.ToString("MMM dd, yyyy")
+                                    </div>
+                                </ul>
+                            </div>
+                            <div class="post-content">
+                                @Html.Raw(post.Body)
+                            </div>
+                            <div class="post-more"><a class="h6" href="@Url.Action("Details", "BlogPosts", new { slug = post.Slug })">Read more<span class="ti-angle-right"></span></a></div>
+                        </div>
+                    </article>
+                }
+
+            </div>
+            <!-- Content end-->
+            <!-- Sidebar-->
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <!-- Search widget-->
+                    <aside class="widget widget_search">
+                        @using (Html.BeginForm("Index", "Home", FormMethod.Get, new { @class = "form" }))
+                        {
+                            <div>
+                                <input id="searchStr" name="searchStr" class="form-control" type="text" placeholder="Type search here">
+                                <button id="btnSearchStr" name="btnsearchStr" class="search-button" type="submit"><span class="fa fa-search"></span></button>
+                            </div>
+                        }
+                    </aside>
+
+                    <!-- Recent entries widget-->
+                    <aside class="widget widget_recent_entries_custom">
+                        <div class="widget-title">
+                            <h6>Featured Software Projects</h6>
+                        </div>
+                        <ul>
+                            <li class="clearfix">
+                                <div class="wi"><a target="_blank" href="http://katierosarioportfolio.azurewebsites.net/"><img src="~/Images/6-pf.jpg" alt=""></a></div>
+                                <div class="wb"><a href="http://katierosarioportfolio.azurewebsites.net/">My Portfolio Website</a><span class="post-date">May 15, 2020</span></div>
+                            </li>
+                            <li class="clearfix">
+                                <div class="wi"><a target="_blank" href="http://katierosariobugtracker.azurewebsites.net/"><img src="~/Images/4-bt.jpg" alt=""></a></div>
+                                <div class="wb"><a target="_blank" href="http://katierosariobugtracker.azurewebsites.net/">Issue Tracker Software</a><span class="post-date">May 30, 2020</span></div>
+                            </li>
+                            <li class="clearfix">
+                                <div class="wi"><a target="_blank" href="http://whenpigsfly.azurewebsites.net/"><img src="~/Images/7-wpf.jpg" alt=""></a></div>
+                                <div class="wb"><a target="_blank" href="http://whenpigsfly.azurewebsites.net/">Family Budgeting Software</a><span class="post-date">June 12, 2020</span></div>
+                            </li>
+
+                        </ul>
+                    </aside>
+
+                     @*Recent portfolio widget
+                    <aside class="widget widget_recent_works">
+                        <div class="widget-title">
+                            <h6>Latest Work</h6>
+                        </div>
+                        <ul>
+                            <li><a href="http://katierosariobugtracker.azurewebsites.net/"><img src="~/Images/4-bt.jpg" alt=""></a></li>
+                            <li><a href="http://katierosarioportfolio.azurewebsites.net/"><img src="~/Images/6-pf.jpg" alt=""></a></li>
+                            <li><a href="http://whenpigsfly.azurewebsites.net/"><img src="~/Images/7-wpf.jpg" alt=""></a></li>
+                            <li><a href="#"><img src="assets/images/widgets/7.jpg" alt=""></a></li>
+                                <li><a href="#"><img src="assets/images/widgets/8.jpg" alt=""></a></li>
+                                <li><a href="#"><img src="assets/images/widgets/9.jpg" alt=""></a></li>
+                        </ul>
+                    </aside>*@
+
+                </div>
+            </div>
+            <!-- Sidebar end-->
+        </div>
+    </div>
+</section>
+<!-- Blog end-->
+
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-12">
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount @Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchStr = ViewBag.Search }))
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/Scripts/tinymce/tinymce.js"></script>
+    <script src="~/Scripts/tinymce/tinymce.min.js"></script>
+    <script>
+        $(function () {
+            tinymce.init({
+                selector: '#Body'
+            });
+        });
+    </script>
+
+}

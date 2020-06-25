@@ -1,0 +1,53 @@
+﻿@model Katie_Rosario_Blog.Models.EmailModel
+
+@using (Html.BeginForm())
+
+
+{
+    @Html.AntiForgeryToken()
+    <h4>
+        Send me a message.
+    </h4>
+
+    @*<div class="row">
+        <div class="col-md-2">
+            <p><img src="~/Images/headshot.jpg" alt=""></p>
+        </div>
+        <div class="col-md-4">
+            <h3>Thanks for visiting!</h3>
+            <h6>I'd love to meet you. Please email me below.</h6>
+            <p></p>
+        </div>
+    </div>*@
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.FromName, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.FromName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.FromName)
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.FromEmail, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.FromEmail, new { @class = "form-control", placeholder = "example@email.com" })
+            @Html.ValidationMessageFor(m => m.FromEmail)
+        </div>
+    </div>
+    <div class="form-group col-sm-12">
+        <div class="text-center m-t-20">
+            <button class="btn btn-round btn-brand" type="submit"><span>Send Message</span></button>
+        </div>
+    </div>
+
+}
+
+
+
+
+
+@{
+    ViewBag.Title = "Contact";
+}

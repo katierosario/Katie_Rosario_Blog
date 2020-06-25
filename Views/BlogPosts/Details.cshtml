@@ -1,0 +1,148 @@
+﻿@using Katie_Rosario_Blog.Models
+@model BlogPost
+
+
+<!-- Page Header-->
+    <section class="module-header parallax bg-dark bg-dark-30" data-background="/Images/module-3-green.jpg">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="h2 m-b-10">@Model.Title</h1>
+                <h3 class="h2 m-b-10">@Model.Abstract</h3>
+                <ul class="post-meta h6">
+                        <a href="#">Katie Rosario</a>
+                        on @Model.Created
+                    <li><a href="#">Comments(@Model.Comments.Count())</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Page Header end-->
+<!-- Blog-->
+<section class="module">
+    <div class="container">
+        <div class="row">
+            <!-- Content-->
+            <div class="col-lg-8">
+                <!-- Post-->
+                <article class="post">
+                    <div class="post-preview">
+                        @if (Model.MediaUrl != null)
+                        {
+                            <img class="img-responsive" src="@Model.MediaUrl" alt="" />
+                        }
+                    </div>
+                    <div class="post-wrapper">
+                        <div class="post-header">
+                            <h1 class="post-title">
+                                @Model.Title
+                            </h1>
+                            <ul class="post-meta h6">
+                                <a href="#">Katie Rosario</a>
+                                on @Model.Created
+                                <li>Comments(@Model.Comments.Count())</li>
+                            </ul>
+                        </div>
+                        <div class="post-content">
+                            @Html.Raw(Model.Body)
+                        </div>
+                    </div>
+                </article>
+                <!-- Post end-->
+                <!-- Comments area-->
+                <div class="comments-area">
+                    <h5 class="comments-title">Comments(@Model.Comments.Count())</h5>
+                    <div class="comment-list">
+                        <!-- Comment-->
+
+                        @foreach (var comment in Model.Comments.OrderByDescending(c => c.Created).ToList())
+                        {
+                            <div class="comment">
+                                <div class="comment-author"><img class="avatar" src="~/Images/comment_avatar.jpg" alt=""></div>
+                                <div class="comment-body">
+                                    <div class="comment-meta">
+                                        <div class="comment-meta-author"><a href="#">@comment.Author.FirstName</a></div>
+                                        <div class="comment-meta-date">
+                                            <a href="#">
+                                                <time>@comment.Created.ToString("MMM dd, yyyy")</time>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="comment-content">
+                                        <p>@comment.Body</p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        <div class="comment-respond">
+                            <hr />
+                            <h5 class="comment-reply-title">Leave a Comment (Must Be Logged In)</h5>
+
+                            @*<form class="comment-form row">*@
+
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                using (Html.BeginForm("Create", "Comments", FormMethod.Post, null))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.Hidden("BlogPostId", Model.Id)
+                                    @Html.HiddenFor(model => model.Slug)
+
+                                    @Html.TextArea("CommentBody", new { rows = 10, cols = 80 })
+
+                                    <button type="submit" class="btn btn-round btn-brand">Add Comment</button>
+                                }
+                            }
+
+                            @*</form>*@
+                        </div>
+                    </div>
+                    <!-- Comments area end-->
+
+                </div>
+            </div>
+            <!-- Content end-->
+            <!-- Sidebar-->
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <!-- Search widget-->
+                    <aside class="widget widget_search">
+                        @using (Html.BeginForm("Index", "Home", FormMethod.Get, new { @class = "form" }))
+                        {
+                            <div>
+                                <input id="searchStr" name="searchStr" class="form-control" type="text" placeholder="Type search here">
+                                <button id="btnSearchStr" name="btnsearchStr" class="search-button" type="submit"><span class="fa fa-search"></span></button>
+                            </div>
+                        }
+                    </aside>
+                    <!-- Recent entries widget-->
+                    <aside class="widget widget_recent_entries_custom">
+                        <div class="widget-title">
+                            <h6>Featured Software Projects</h6>
+                        </div>
+                        <ul>
+                            <li class="clearfix">
+                                <div class="wi"><a target="_blank" href="http://katierosarioportfolio.azurewebsites.net/"><img src="~/Images/6-pf.jpg" alt=""></a></div>
+                                <div class="wb"><a target="_blank" href="http://katierosarioportfolio.azurewebsites.net/">My Portfolio Website</a><span class="post-date">May 15, 2020</span></div>
+                            </li>
+                            <li class="clearfix">
+                                <div class="wi"><a target="_blank" href="http://katierosariobugtracker.azurewebsites.net/"><img src="~/Images/4-bt.jpg" alt=""></a></div>
+                                <div class="wb"><a target="_blank" href="http://katierosariobugtracker.azurewebsites.net/">Issue Tracker Software</a><span class="post-date">May 30, 2020</span></div>
+                            </li>
+                            <li class="clearfix">
+                                <div class="wi"><a target="_blank" href="http://whenpigsfly.azurewebsites.net/"><img src="~/Images/7-wpf.jpg" alt=""></a></div>
+                                <div class="wb"><a target="_blank" href="http://whenpigsfly.azurewebsites.net/">Family Budgeting Software</a><span class="post-date">June 12, 2020</span></div>
+                            </li>
+
+                        </ul>
+                    </aside>
+
+                </div>
+            </div>
+        </div>
+            
+    <!-- Sidebar end-->
+    </div>
+</section>
+<!-- Blog end-->
